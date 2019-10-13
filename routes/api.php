@@ -24,3 +24,5 @@ Route::get('products', "ProductController@show");
 Route::get('products/{id}', "ProductController@showAProduct");
 
 Route::put('products/{id}', "ProductController@update");
+
+Route::delete('products/{id}', "ProductController@destroy");

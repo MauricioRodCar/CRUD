@@ -33,14 +33,43 @@ class ProductController extends Controller
     * @param \Illuminate\Http\Request $request
     * @return \Illuminate\Http\Response
     */
+
      public function store(Request $request)
      {
-         // Create a new product
-         $product = Product::create($request->all());
 
-         // Return a response with a product json
-         // representation and a 201 status code
-         return response()->json($product,201);
+        if (is_null($request->name)) {
+          return response()->json([
+               "errors"=> ["ID"=> "ERR_CREATE-1",
+               "title"=>  "Unprocessable Entity",
+               "code"=>  "422",
+               ]]  , 422);
+          }elseif (is_null($request->price)) {
+            return response()->json([
+                 "errors"=> ["ID"=> "ERR_CREATE-2",
+                 "title"=>  "Unprocessable Entity",
+                 "code"=>  "422",
+                 ]]  , 422);
+        }elseif (!(is_numeric($request->price))) {
+              return response()->json([
+                   "errors"=> ["ID"=> "ERR_CREATE-3",
+                   "title"=>  "Unprocessable Entity",
+                   "code"=>  "422",
+                   ]]  , 422);
+              }elseif (($request->price)<=0) {
+                      return response()->json([
+                           "errors"=> ["ID"=> "ERR_CREATE-4",
+                           "title"=>  "Unprocessable Entity",
+                           "code"=>  "422",
+                           ]]  , 422);
+                }else {
+                  // Create a new product
+                  $product = Product::create($request->all());
+
+                  // Return a response with a product json
+                  // representation and a 201 status code
+                  return response()->json($product,201);
+                }
+
      }
 
     /**
@@ -62,7 +91,16 @@ class ProductController extends Controller
      */
     public function showAProduct(Product $product, $id)
     {
-        return $product->findorfail($id);
+
+      if (!(Product::find($id))) {
+        return response()->json([
+             "errors"=> ["ID"=> "ERR_SHOW-1",
+             "title"=>  "Not Found",
+             "code"=>  "404",
+             ]]  , 404);
+        } else {
+          return $product->find($id);
+      }
     }
 
     /**
@@ -85,16 +123,32 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $product = Product::find($id);
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->save();
+        if (!(is_numeric($request->price))) {
+          return response()->json([
+               "errors"=> ["ID"=> "ERR_UPDATE-1",
+               "title"=>  "Unprocessable Entity",
+               "code"=>  "422",
+               ]]  , 422);
+          }elseif (($request->price)<=0) {
+            return response()->json([
+                 "errors"=> ["ID"=> "ERR_UPDATE-2",
+                 "title"=>  "Unprocessable Entity",
+                 "code"=>  "422",
+                 ]]  , 422);
+              }elseif (!(Product::find($id))) {
+                return response()->json([
+                     "errors"=> ["ID"=> "ERR_UPDATE-3",
+                     "title"=>  "Not Found",
+                     "code"=>  "404",
+                     ]]  , 404);
+                } else {
+                  $product = Product::find($id);
+                  $product->name = $request->name;
+                  $product->price = $request->price;
+                  $product->save();
 
-
-
-        // Return a response with a product json
-        // representation and a 201 status code
-        return response()->json($product,200);
+                  return response()->json($product,200);
+        }
     }
 
     /**
@@ -105,7 +159,16 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-      $product = Product::destroy($id);
-  
+
+      if (!(Product::find($id))) {
+        return response()->json([
+             "errors"=> ["ID"=> "ERR_DELETE-1",
+             "title"=>  "Unprocessable Entity",
+             "code"=>  "404",
+             ]]  , 404);
+        } else {
+            $product = Product::destroy($id);
+            return response()->json(204);
+      }
     }
 }
