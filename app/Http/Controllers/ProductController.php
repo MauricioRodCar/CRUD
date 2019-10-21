@@ -36,38 +36,53 @@ class ProductController extends Controller
 
      public function store(Request $request)
      {
+       $type = $request->data["type"];
+       $name = $request->data["attributes"]["name"];
+       $price = $request->data["attributes"]["price"];
 
-        if (is_null($request->name)) {
+      if (is_null($name)) {
           return response()->json([
                "errors"=> ["ID"=> "ERR_CREATE-1",
                "title"=>  "Unprocessable Entity",
                "code"=>  "422",
                ]]  , 422);
-          }elseif (is_null($request->price)) {
+          }elseif (is_null($price)) {
             return response()->json([
                  "errors"=> ["ID"=> "ERR_CREATE-2",
                  "title"=>  "Unprocessable Entity",
                  "code"=>  "422",
                  ]]  , 422);
-        }elseif (!(is_numeric($request->price))) {
+        }elseif (!(is_numeric($price))) {
               return response()->json([
                    "errors"=> ["ID"=> "ERR_CREATE-3",
                    "title"=>  "Unprocessable Entity",
                    "code"=>  "422",
                    ]]  , 422);
-              }elseif (($request->price)<=0) {
+              }elseif (($price)<=0) {
                       return response()->json([
                            "errors"=> ["ID"=> "ERR_CREATE-4",
                            "title"=>  "Unprocessable Entity",
                            "code"=>  "422",
                            ]]  , 422);
                 }else {
-                  // Create a new product
-                  $product = Product::create($request->all());
 
+                  $product = Product::create([
+                                              'type'=> $type,
+                                              'name'=> $name,
+                                              'price'=> $price
+                                            ]);
+                  $response = [
+                              "data"=> ["type"=> $type,
+                                        "ID"=>  $product->id,
+                                        "attributes"=>[
+                                                      "name"=> $name,
+                                                      "price"=> $price,
+                                                      ]
+                                        ]
+                              ];
                   // Return a response with a product json
                   // representation and a 201 status code
-                  return response()->json($product,201);
+                  return response()->json($response,201);
                 }
 
      }
@@ -99,7 +114,24 @@ class ProductController extends Controller
              "code"=>  "404",
              ]]  , 404);
         } else {
-          return $product->find($id);
+
+          $found = $product->find($id);
+
+          $type = $found->type;
+          $name = $found->name;
+          $price = $found->price;
+
+          $response = [
+                      "data"=> ["type"=> $type,
+                                "ID"=>  $found->id,
+                                "attributes"=>[
+                                              "name"=> $name,
+                                              "price"=> $price,
+                                              ]
+                                ]
+                      ];
+
+          return response()->json($response,200);
       }
     }
 
@@ -123,13 +155,17 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!(is_numeric($request->price))) {
+        $type = $request->data["type"];
+        $name = $request->data["attributes"]["name"];
+        $price = $request->data["attributes"]["price"];
+
+        if (!(is_numeric($price))) {
           return response()->json([
                "errors"=> ["ID"=> "ERR_UPDATE-1",
                "title"=>  "Unprocessable Entity",
                "code"=>  "422",
                ]]  , 422);
-          }elseif (($request->price)<=0) {
+          }elseif (($price)<=0) {
             return response()->json([
                  "errors"=> ["ID"=> "ERR_UPDATE-2",
                  "title"=>  "Unprocessable Entity",
@@ -143,11 +179,22 @@ class ProductController extends Controller
                      ]]  , 404);
                 } else {
                   $product = Product::find($id);
-                  $product->name = $request->name;
-                  $product->price = $request->price;
+                  $product->name = $name;
+                  $product->price = $price;
+                  $product->type = $type;
                   $product->save();
 
-                  return response()->json($product,200);
+                  $response = [
+                              "data"=> ["type"=> $type,
+                                        "ID"=>  $product->id,
+                                        "attributes"=>[
+                                                      "name"=> $name,
+                                                      "price"=> $price,
+                                                      ]
+                                        ]
+                              ];
+
+                  return response()->json($response,200);
         }
     }
 
