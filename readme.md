@@ -1,4 +1,4 @@
-<p align="center"><img src="http://simplepie.org/images/logo_simplepie_horizontal.png" width="400"></p>
+<p align="center"><img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.nalpeiron.com%2Fimages%2Fx-featico-nsl-api.png&f=1&nofb=1"></p>
 
 ## Acerca del proyecto
 
