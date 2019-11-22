@@ -159,7 +159,6 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-
       if (!(Product::find($id))) {
         return response()->json([
              "errors"=> ["ID"=> "ERR_DELETE-1",
