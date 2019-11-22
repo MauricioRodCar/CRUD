@@ -78,7 +78,10 @@ class ProductController extends Controller
                                                       "name"=> $name,
                                                       "price"=> $price,
                                                       ]
-                                        ]
+                                        ],
+                                'links' => [
+                                            'self' => 'http://localhost:8000/api/products/'.$product->id
+                                           ]
                               ];
                   // Return a response with a product json
                   // representation and a 201 status code
@@ -128,7 +131,10 @@ class ProductController extends Controller
                                               "name"=> $name,
                                               "price"=> $price,
                                               ]
-                                ]
+                                ],
+                      'links' => [
+                                 'self' => 'http://localhost:8000/api/products/'.$product->id
+                                 ]
                       ];
 
           return response()->json($response,200);
@@ -191,6 +197,9 @@ class ProductController extends Controller
                                                       "name"=> $name,
                                                       "price"=> $price,
                                                       ]
+                                        ],
+                              'links' => [
+                                          'self' => 'http://localhost:8000/api/products/'.$product->id
                                         ]
                               ];
 

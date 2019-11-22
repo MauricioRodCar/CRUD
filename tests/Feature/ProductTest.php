@@ -25,7 +25,7 @@ class ProductTest extends TestCase
                                                 "name"=> "gato",
                                                 "price"=> 12.34,
                                                 ]
-                                  ]
+                                  ],
                         ];
 
         // When
