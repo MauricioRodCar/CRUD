@@ -133,7 +133,7 @@ class ProductController extends Controller
                                               ]
                                 ],
                       'links' => [
-                                 'self' => 'http://localhost:8000/api/products/'.$product->id
+                                 'self' => 'http://localhost:8000/api/products/'.$id
                                  ]
                       ];
 

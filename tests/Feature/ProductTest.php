@@ -38,7 +38,8 @@ class ProductTest extends TestCase
         // with the correct data
         $response->assertJsonFragment([
             'name' => 'gato',
-            'price' => 12.34
+            'price' => 12.34,
+            "self"=> "http://localhost:8000/api/products/1"
         ]);
 
         $body = $response->decodeResponseJson();
@@ -271,7 +272,8 @@ class ProductTest extends TestCase
         // with the correct data
         $response->assertJsonFragment([
           'name' => 'gato',
-          'price' => "12.34"
+          'price' => "12.34",
+           "self"=> "http://localhost:8000/api/products/2"
         ]);
 
         $body = $response->decodeResponseJson();
@@ -394,7 +396,8 @@ class ProductTest extends TestCase
 
         $response->assertJsonFragment([
           'name' => 'perro',
-          'price' => 43.21
+          'price' => 43.21,
+          "self"=> "http://localhost:8000/api/products/4"
         ]);
 
         $body = $response->decodeResponseJson();
